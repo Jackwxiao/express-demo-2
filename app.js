@@ -26,16 +26,42 @@ app.route('/xxx')
     })
 
 // use 初使用
+// app.use((request,response,next) => {
+//     console.log(request.url)
+//     response.write('world ')
+//     next()
+// })
+//
+// app.use((request,response,next)=>{
+//     console.log(2)
+//     response.write('hi')
+//     response.end()
+// })
+
+// 错误处理
 app.use((request,response,next) => {
-    console.log(request.url)
-    response.write('world ')
+    console.log(1);
+    next()
+})
+app.use((request,response,next) => {
+    console.log(2);
+    if(true){
+        next('未登录')
+    }else{
+        next()
+    }
+})
+app.use((request,response,next) => {
+    console.log(3);
     next()
 })
 
-app.use((request,response,next)=>{
-    console.log(2)
-    response.write('hi')
-    response.end()
+app.use((error,request,response,next) => {
+    if(response.headersSent) {
+        return next(error)
+    }
+    response.status(500)
+    response.send(error)
 })
 
 app.listen(3000,()=>{
