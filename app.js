@@ -57,11 +57,13 @@ app.use((request,response,next) => {
 })
 
 app.use((error,request,response,next) => {
-    if(response.headersSent) {
-        return next(error)
-    }
-    response.status(500)
-    response.send(error)
+    console.log(error)
+    next(error)
+})
+let count = 0
+app.use((error,request,response,next) => {
+    count += 1
+    console.log(`目前有 ${count} 个错误`);
 })
 
 app.listen(3000,()=>{
